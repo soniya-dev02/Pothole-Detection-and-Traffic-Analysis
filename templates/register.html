@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register - Pothole Detection & Traffic Analysis</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    :root {
+      --primary: #00c896;
+      --dark: #0d0d0d;
+      --dark2: #141414;
+      --dark3: #1a1a1a;
+      --text: #e0e0e0;
+      --text-muted: #888;
+      --border: #2a2a2a;
+      --red: #ff4d4d;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--dark);
+      color: var(--text);
+      margin: 0;
+      overflow-x: hidden;
+    }
+
+     /* NAVBAR */
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 1000;
+      background: rgba(13,13,13,0.95); backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border); padding: 14px 0;
+    }
+    .nav-inner { max-width: 1200px; margin: auto; padding: 0 24px; display: flex; justify-content: space-between; align-items: center; }
+    .nav-brand { font-size: 20px; font-weight: 700; color: #fff; text-decoration: none; }
+    .nav-brand span { color: var(--primary); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 500; transition: color .2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--primary); }
+    .nav-links .btn-register { background: var(--primary); color: #000 !important; padding: 8px 20px; border-radius: 6px; font-weight: 600; }
+    .nav-links .btn-logout { color: #ff4d4d !important; }
+
+     /* PAGE HERO */
+    .page-hero {
+      min-height: 340px;
+      background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+        url('static/images/traffic2.jpg') center 70%/cover no-repeat;
+      display: flex; align-items: center;
+      padding: 120px 24px 60px;
+    }
+    .page-hero-inner { max-width: 1200px; margin: auto; }
+    .breadcrumb { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+    .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--primary); }
+    .breadcrumb i { font-size: 10px; }
+    .page-hero h1 { font-size: 48px; font-weight: 800; color: #fff; }
+    .page-hero h1 span { color: var(--primary); }
+
+
+    /* Background glow circles */
+    .circle1 { position: absolute; width: 400px; height: 400px; background: radial-gradient(circle, rgba(0,200,150,0.08), transparent 70%); border-radius: 50%; left: -100px; bottom: -100px; }
+    .circle2 { position: absolute; width: 300px; height: 300px; background: radial-gradient(circle, rgba(0,200,150,0.06), transparent 70%); border-radius: 50%; right: 50px; bottom: 100px; }
+    .circle3 { position: absolute; width: 200px; height: 200px; background: radial-gradient(circle, rgba(0,200,150,0.05), transparent 70%); border-radius: 50%; right: 80px; top: 80px; }
+
+    /* CARD */
+    .register-card {
+      background: var(--dark3);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 52px 48px;
+      width: 440px;
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.4);
+    }
+
+    /* ICON */
+    .register-icon {
+      width: 64px; height: 64px;
+      background: rgba(0,200,150,0.1);
+      border: 2px solid rgba(0,200,150,0.3);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 24px;
+    }
+    .register-icon i { font-size: 26px; color: var(--primary); }
+
+    .register-card h1 { font-size: 24px; font-weight: 700; color: #fff; margin-bottom: 8px; text-align: center; }
+    .register-card .subtitle { font-size: 14px; color: var(--text-muted); margin-bottom: 32px; text-align: center; }
+
+    .register-section{
+      min-height:700px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      padding:80px 20px;
+      position:relative;
+    }
+
+    /* FLASH MESSAGES */
+    .alert-error { background: rgba(255,77,77,0.1); border: 1px solid rgba(255,77,77,0.3); color: #ff4d4d; border-radius: 10px; padding: 12px 16px; font-size: 13px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+    .alert-success { background: rgba(0,200,150,0.1); border: 1px solid rgba(0,200,150,0.3); color: var(--primary); border-radius: 10px; padding: 12px 16px; font-size: 13px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+
+    /* FORM */
+    .form-group { margin-bottom: 18px; }
+    .form-label { display: block; font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+    .form-label i { color: var(--primary); margin-right: 6px; }
+    .form-input {
+      width: 100%; background: var(--dark2);
+      border: 1px solid var(--border); border-radius: 10px;
+      padding: 13px 16px; font-size: 14px; color: var(--text);
+      font-family: 'Poppins', sans-serif; outline: none; transition: border .2s;
+    }
+    .form-input:focus { border-color: var(--primary); }
+    .form-input::placeholder { color: var(--text-muted); }
+
+    /* BUTTON */
+    .btn-submit {
+      width: 100%; background: var(--primary); color: #000;
+      border: none; border-radius: 10px; padding: 14px;
+      font-size: 15px; font-weight: 700; cursor: pointer;
+      font-family: 'Poppins', sans-serif; transition: opacity .2s;
+      margin-top: 8px;
+    }
+    .btn-submit:hover { opacity: 0.85; }
+
+    /* FOOTER */
+    footer { background: var(--dark2); border-top: 1px solid var(--border); padding: 60px 24px 24px; }
+    .footer-inner { max-width: 1200px; margin: auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
+    .footer-brand { font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 12px; }
+    .footer-brand span { color: var(--primary); }
+    .footer-desc { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
+    .footer-col h4 { font-size: 14px; font-weight: 600; color: #fff; margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 10px; }
+    .footer-col ul li a { font-size: 13px; color: var(--text-muted); text-decoration: none; transition: color .2s; }
+    .footer-col ul li a:hover { color: var(--primary); }
+    .footer-bottom { max-width: 1200px; margin: auto; border-top: 1px solid var(--border); padding-top: 24px; text-align: center; font-size: 13px; color: var(--text-muted); }
+
+    /* DIVIDER */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+    .login-link { display: block; text-align: center; font-size: 13px; color: var(--text-muted); text-decoration: none; }
+    .login-link span { color: var(--primary); font-weight: 600; }
+    .login-link:hover span { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-brand">Pothole Detection <span> And Traffic Analysis</span></a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/about">About</a></li>
+      <li><a href="/methodology">Methodology</a></li>
+      <li><a href="/predict">Prediction</a></li>
+      <li><a href="/traffic">Traffic Analysis</a></li>
+      
+      
+      {% if session.get('user_id') %}
+        <li><a href="/logout" class="btn-register">Logout</a></li>      
+      {% else %}
+        <li><a href="/login" class="btn-register">Login</a></li>      
+      {% endif %}
+    </ul>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="breadcrumb">
+      <a href="/">Home</a>
+      <i class="fas fa-chevron-right"></i>
+      <span style="color: var(--primary);">Register</span>
+    </div>
+    <h1>Register</h1>
+  </div>
+</div>
+
+<div class="circle1"></div>
+<div class="circle2"></div>
+<div class="circle3"></div>
+
+<section class="register-section">
+  <div class="register-card">
+
+  <h1>Register</h1>
+  <p class="subtitle">Create your account</p>
+
+  <!-- Flash messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert-{{ category }}">
+          <i class="fas fa-{% if category == 'error' %}exclamation-circle{% else %}check-circle{% endif %}"></i>
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <form action="/register" method="POST">
+    <div class="form-group">
+      <label class="form-label"><i class="fas fa-user"></i>Username</label>
+      <input type="text" name="uname" class="form-input" placeholder="Enter your username" required>
+    </div>
+    <div class="form-group">
+      <label class="form-label"><i class="fas fa-envelope"></i>Email Address</label>
+      <input type="email" name="email" class="form-input" placeholder="Enter your email" required>
+    </div>
+    <div class="form-group">
+      <label class="form-label"><i class="fas fa-lock"></i>Password</label>
+      <input type="password" name="password" class="form-input" placeholder="Enter your password" required>
+    </div>
+    <button type="submit" class="btn-submit">Register</button>
+  </form>
+
+  <hr class="divider">
+
+  <a href="/login" class="login-link">
+    Already have an account? <span>Login</span>
+  </a>
+</div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">Pothole<span> Detection</span></div>
+      <p class="footer-desc">AI-powered pothole detection and traffic analysis system using YOLOv8 to improve road safety through real-time pothole detection, traffic monitoring, weather analysis, and intelligent route optimization.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigation</h4>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/methodology">Methodology</a></li>
+        <li><a href="/predict">Prediction</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Technologies</h4>
+      <ul>
+        <li><a href="#">YOLOv8 Model</a></li>
+        <li><a href="#">Flask Backend</a></li>
+        <li><a href="#">OpenCV</a></li>
+        <li><a href="#">MySQL Database</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Project</h4>
+      <ul>
+        <li><a href="#">Pothole Detection</a></li>
+        <li><a href="#">Traffic Analysis</a></li>
+        <li><a href="#">Road Safety</a></li>
+        <li><a href="#">Deep Learning</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    &copy; 2026 Pothole Detection & Traffic Analysis. All rights reserved.
+  </div>
+</footer>  
+
+</body>
+</html>
